@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+</head>
+<body>
+		<button id="knopf1">Press me daddy!</button>
+		--------------------
+		<button id="knopf2">Press me mommy!</button>
+		--------------------
+		<button id="knopf3">I love rin tohsaka!</button>
+
+  <script>
+		document.getElementById("knopf1").addEventListener("click", function() {
+		let answer = confirm("Klicke ok wenn du damit einverstanden bist, dass fate der fcking goat ist!?");
+				if(answer){
+						console.log("OK");
+				} else {
+						console.log("Abbrechen");
+				}
+		});
+		document.getElementById("knopf2").addEventListener("click", function() {
+		let name = prompt("Wer ist geiler, Rin Tohsaka oder Saber?");
+				console.log("So du findest also, " + name + " geiler .-.");
+		});
+		document.getElementById("knopf3").addEventListener("click", function() {
+				alert("Emiya TOO");
+		});
+  </script>
+</body>
+</html>
+
