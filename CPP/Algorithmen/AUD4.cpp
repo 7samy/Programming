@@ -28,9 +28,9 @@ long long fib_optimiert(int n) {
   if (n <= 2)
     return 1;
 
-  long long vorvor = 1;  // fib(i-2)
-  long long vor = 1;     // fib(i-1)
-  long long aktuell = 0; // fib(i)
+  long long vorvor = 1;
+  long long vor = 1;
+  long long aktuell = 0;
 
   for (int i = 3; i <= n; ++i) {
     aktuell = vor + vorvor;
@@ -76,3 +76,59 @@ int main() {
 
   return 0;
 }
+
+// 13c)
+// ZK: O(2 hoch n), O(n), O(n)
+// SK: O(n), O(n), O(1)
+
+// 14a)
+
+int Vektor::bin_suche(int sw) {
+
+  int l_u = 0, l_o = dimension - 1;
+  while (l_u <= l_o) {
+    int mitte = (l_u + l_o) / 2;
+    if (daten[mitte] == sw)
+      return mitte;
+    else if (daten[mitte] < sw)
+      l_u = mitte + 1;
+    else
+      l_o = mitte - 1;
+  }
+  return -1;
+}
+
+// b)
+// im schlechtesten Fall log2(n)
+// bei Array Leange von 2(hoch)k - 1 -> k Verlgeiche
+// Log2(n) + 1
+
+// 15
+// a)
+
+long T_rekursiv(int n) {
+  if (n == 1)
+    return 1;
+  else
+    return n * T_rekursiv(n - 1) + n;
+}
+
+// T(1)=1
+// T(2)=2⋅T(1)+2=2⋅1+2=4
+// T(3)=3⋅T(2)+3=3⋅4+3=15
+// T(4)=4⋅T(3)+4=4⋅15+4=64
+// T(5)=5⋅T(4)+5=5⋅64+5=325
+
+// b)
+
+long T_iterativ(int n) {
+  long t = 1; // T(1)
+  for (int i = 2; i <= n; i++) {
+    t = i * t + i;
+  }
+  return t;
+}
+
+// c) O(n!)
+// d) n - 1 rekursive Aufrufe
+// e) O(n)
