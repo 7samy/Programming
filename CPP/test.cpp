@@ -8,7 +8,7 @@ void test(int& a){
 int main(){
 
 		int x = 5;
-		test(x);
+    test(x);
 		std::cout << &x << std::endl;
 		std::cout << x << std::endl;
 }
