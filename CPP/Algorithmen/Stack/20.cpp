@@ -14,7 +14,6 @@ int main() {
   std::cout << "Pop: " << s.pop() << std::endl; // 30
   std::cout << "Pop: " << s.pop() << std::endl; // 20
 
-  std::cout << "Empty: " << s.empty() << std::endl;   // false
   std::cout << "Length: " << s.length() << std::endl; // 1
 
   return 0;
