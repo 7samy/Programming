@@ -1,0 +1,10 @@
+a)
+((a * b) + b) + (a / c)
+
+((4*8)+8) + (4 / 2) = 42
+
+
+b)
+(a + b) + c = a + (b + c)  Addition ist assoziativ
+(x - b) * c != (x * b) - c
+(b - c) * x = (b * x) - (c * x) Distributivgesetz
