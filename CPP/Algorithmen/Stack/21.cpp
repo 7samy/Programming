@@ -1,66 +1,34 @@
 #include "Stack.h"
-#include <cctype>
-#include <iostream>
 #include <string>
 
-int getPriority(char op) {
-  if (op == '+' || op == '-')
+int precedence(char c) {
+  if (c == '+' || c == '-')
     return 1;
-  if (op == '*' || op == '/')
+  if (c == '*' || c == '/')
     return 2;
   return 0;
 }
 
-std::string infixToPostfix(const std::string &infix) {
+std::string infix_to_postfix(const std::string &expr) {
   Stack<char> s;
-  std::string postfix = "";
+  std::string result;
 
-  for (char ch : infix) {
-    if (std::isalnum(ch)) {
-      postfix += ch;
-    }
-
-    else if (ch == '(') {
-      s.push(ch);
-    }
-
-    else if (ch == ')') {
-      while (!s.empty() && s.top() != '(') {
-        postfix += s.pop();
-      }
-      if (!s.empty()) {
-        s.pop();
-      }
-    }
-
-    else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-
-      while (!s.empty() && s.top() != '(' &&
-             getPriority(s.top()) >= getPriority(ch)) {
-        postfix += s.pop();
-      }
-      s.push(ch);
+  for (char c : expr) {
+    if (isalnum(c)) {
+      result += c; // Operand direkt ausgeben
+    } else if (c == '(') {
+      s.push(c); // Klammer auf Stack
+    } else if (c == ')') {
+      while (!s.empty() && s.top() != '(') // alles bis '(' ausgeben
+        result += s.pop();
+      s.pop(); // '(' wegwerfen
+    } else {   // Operator
+      while (!s.empty() && precedence(s.top()) >= precedence(c))
+        result += s.pop(); // höhere Priorität zuerst raus
+      s.push(c);
     }
   }
-
-  while (!s.empty()) {
-    postfix += s.pop();
-  }
-
-  return postfix;
-}
-
-int main() {
-  std::string input = "a+b*c";
-  std::string result = infixToPostfix(input);
-
-  std::cout << "Infix:  " << input << std::endl;
-  std::cout << "Postfix: " << result << std::endl;
-
-  input = "(a+b)*c";
-  result = infixToPostfix(input);
-  std::cout << "\nInfix:  " << input << std::endl;
-  std::cout << "Postfix: " << result << std::endl;
-
-  return 0;
+  while (!s.empty())
+    result += s.pop(); // Rest ausgeben
+  return result;
 }

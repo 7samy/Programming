@@ -1,20 +1,39 @@
-#include "Stack.h"
-#include <iostream>
+// Stack.h
+template <class item_type> class Stack {
+  struct node {
+    item_type item;
+    node *next;
+  };
+  node *tail;
+  int anz_items;
 
-int main() {
-  Stack<int> s;
+public:
+  Stack() : tail(nullptr), anz_items(0) {}
 
-  s.push(10);
-  s.push(20);
-  s.push(30);
+  ~Stack() {
+    while (tail) {
+      node *tmp = tail->next;
+      delete tail;
+      tail = tmp;
+    }
+  }
 
-  std::cout << "Top: " << s.top() << std::endl;       // 30
-  std::cout << "Length: " << s.length() << std::endl; // 3
+  void push(item_type &r) {
+    node *n = new node{r, tail};
+    tail = n;
+    anz_items++;
+  }
 
-  std::cout << "Pop: " << s.pop() << std::endl; // 30
-  std::cout << "Pop: " << s.pop() << std::endl; // 20
+  item_type pop() {
+    node *tmp = tail;
+    item_type val = tail->item;
+    tail = tail->next;
+    delete tmp;
+    anz_items--;
+    return val;
+  }
 
-  std::cout << "Length: " << s.length() << std::endl; // 1
-
-  return 0;
-}
+  item_type top() { return tail->item; }
+  int length() { return anz_items; }
+  bool empty() { return tail == nullptr; }
+};
