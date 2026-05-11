@@ -1,123 +1,89 @@
 #include "Tabelle.h"
 
-// Node Konstruktor
-Node::Node(const item_type &d, Node *p, Node *n) : data(d), prev(p), next(n) {}
-
-// ---------- Tabelle ----------
-
-Tabelle::Tabelle() : head(nullptr), tail(nullptr), current(nullptr), count(0) {}
+Tabelle::Tabelle() : head(nullptr), tail(nullptr), current(nullptr) {}
 
 Tabelle::~Tabelle() {
-  Node *tmp = head;
-  while (tmp) {
-    Node *next = tmp->next;
-    delete tmp;
-    tmp = next;
+  while (head) {
+    Node *tmp = head->next;
+    delete head;
+    head = tmp;
   }
 }
 
 bool Tabelle::first() {
-  if (count == 0)
+  if (!head)
     return false;
   current = head;
   return true;
 }
-
 bool Tabelle::last() {
-  if (count == 0)
+  if (!tail)
     return false;
   current = tail;
   return true;
 }
-
 bool Tabelle::next() {
-  if (current == nullptr || current->next == nullptr)
+  if (!current || !current->next)
     return false;
   current = current->next;
   return true;
 }
-
 bool Tabelle::previous() {
-  if (current == nullptr || current->prev == nullptr)
+  if (!current || !current->prev)
     return false;
   current = current->prev;
   return true;
 }
 
-bool Tabelle::append(item_type r) {
-  Node *newNode = new Node(r);
-  if (count == 0) {
-    head = tail = current = newNode;
-  } else {
-    newNode->prev = tail;
-    tail->next = newNode;
-    tail = newNode;
-  }
-  ++count;
-  return true;
-}
-
-bool Tabelle::insert(item_type r) {
-  // Einfügen nur möglich, wenn current existiert
-  if (current == nullptr)
-    return false;
-
-  Node *newNode = new Node(r);
-
-  if (current == head) {
-    // Einfügen vor dem ersten Element
-    newNode->next = head;
-    head->prev = newNode;
-    head = newNode;
-  } else {
-    // Einfügen in der Mitte oder vor tail
-    newNode->prev = current->prev;
-    newNode->next = current;
-    current->prev->next = newNode;
-    current->prev = newNode;
-  }
-  current = newNode;
-  ++count;
-  return true;
-}
-
-bool Tabelle::delete_node() {
-  if (current == nullptr || count == 0)
-    return false;
-
-  Node *toDelete = current;
-
-  if (count == 1) {
-    head = tail = current = nullptr;
-  } else if (current == head) {
-    head = head->next;
-    head->prev = nullptr;
-    current = head;
-  } else if (current == tail) {
-    tail = tail->prev;
-    tail->next = nullptr;
-    current = tail;
-  } else {
-    current->prev->next = current->next;
-    current->next->prev = current->prev;
-    current = current->next;
-  }
-
-  delete toDelete;
-  --count;
-  return true;
-}
-
-bool Tabelle::get_node(item_type &r) const {
-  if (current == nullptr)
+bool Tabelle::get_node(item_type &r) {
+  if (!current)
     return false;
   r = current->data;
   return true;
 }
-
-bool Tabelle::set_node(const item_type &r) {
-  if (current == nullptr)
+bool Tabelle::set_node(item_type &r) {
+  if (!current)
     return false;
   current->data = r;
+  return true;
+}
+
+bool Tabelle::append(item_type r) {
+  Node *n = new Node{r, tail, nullptr};
+  if (tail)
+    tail->next = n;
+  else
+    head = n;
+  tail = current = n;
+  return true;
+}
+
+bool Tabelle::insert(item_type r) {
+  if (!current)
+    return false;
+  Node *n = new Node{r, current->prev, current};
+  if (current->prev)
+    current->prev->next = n;
+  else
+    head = n;
+  current->prev = n;
+  current = n;
+  return true;
+}
+
+bool Tabelle::delete_node() {
+  if (!current)
+    return false;
+  Node *tmp = current;
+  if (current->prev)
+    current->prev->next = current->next;
+  else
+    head = current->next;
+  if (current->next)
+    current->next->prev = current->prev;
+  else
+    tail = current->prev;
+  current = tmp->next ? tmp->next : tmp->prev;
+  delete tmp;
   return true;
 }
